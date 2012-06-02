@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+      <link rel="stylesheet" href="styles/leaflet.css" />
+      <link rel="stylesheet" href="styles/staalkr.css" />
+      <script type="text/javascript"
+         src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+      </script>
+      <script type="text/javascript">
+
+		$(document).ready(function(){
+
+    		$(".trigger").click(function(){
+        			$(".panel").toggle("fast");
+        			$(this).toggleClass("active");
+        			$(this).hide();
+        			return false;
+    			});
+		
+			
+		  $(".closePanel").click(function(){
+        			$(".panel").toggle("fast");
+        			$(".trigger").toggleClass("active");
+        			$(".trigger").show();
+        			return false;
+    			});
+			});
+
+		</script>
+      <!--[if lte IE 8]>
+         <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
+      <![endif]-->
+
+   </head>
+	
+   <body>
+<div id="container">
+
+</div>
+
+<div class="panel">
+		<div class="closePanel">X</div>
+		<div class="influencerListPanel">
+      <h1 style="text-align: center;">Top Influencers List</h1>
+      <div id="influencers_list"></div>
+      </div>
+</div>
+<div style="clear:both;"></div>
+
+</div>
+<a class="trigger" href="#">Staalkr List</a>
+
+
+      <div id="map" style="100%; height: 100%"></div>
+     
+
+      <!-- JS scripts -->
+  
+      <script type="text/javascript"
+         src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js">
+      </script>	
+      <script type="text/javascript" src="scripts/staalkr.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function() {
+            TRAACKR.staalkr = TRAACKR.staalkr_func();
+            TRAACKR.staalkr.init({
+               searchTerm:"eshackday",
+               esHost: "localhost:9200",
+               esIndex: "traackr_oakland",
+               cloudMadeKey: "e9c4b141b3c64736a8db238eb1f8a4dd",
+               fromDate: "2012-06-02T14:00:00.000Z",
+               mapLat : 37.809784,
+               mapLong :-122.252598,
+               mapZoomLevel: 10,
+               influenceThresh: 0,
+            });
+         });
+      </script>
+
+
+   </body>
+
+</html>

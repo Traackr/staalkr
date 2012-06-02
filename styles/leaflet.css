@@ -260,7 +260,7 @@ a.leaflet-active {
 	width: 40px;
 	height: 16px;
 	position: relative;
-	overflow: hidden;
+	overflow: auto;
 	}
 .leaflet-popup-tip {
 	width: 15px;
@@ -283,7 +283,7 @@ a.leaflet-active {
 	width: 10px;
 	height: 10px;
 
-	overflow: hidden;
+	overflow: auto;
 	}
 .leaflet-popup-content p {
 	margin: 18px 0;

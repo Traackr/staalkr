@@ -21,7 +21,7 @@ if (typeof (TRAACKR.staalkr) == "undefined")
 var map = new L.Map('map');
 
 // Start from date
-var from_date =  "2012-03-25T00:00:00.000Z";
+var from_date =  '';
 
 // Search Term
 var searchTerm = '';
@@ -29,8 +29,20 @@ var searchTerm = '';
 // Elastic Search Host
 var esHost = '';
 
+// Elastic Search Index
+var esIndex = '';
+
 // CloudMade Key
-var cloudMadeKey = 'e9c4b141b3c64736a8db238eb1f8a4dd';
+var cloudMadeKey = '';
+
+// Influence Threshold
+var influenceThresh = -1;
+
+var mapLat = '';
+
+var mapLong = '';
+
+var mapZoomLevel = '';
 
 // Global list vars
 var known_screen_names = [];
@@ -43,15 +55,26 @@ TRAACKR.staalkr_func = function() {
  });
  
  var _init = function(config) {
- 	console.log("Initializing Map");
+ 	console.log("Initializing The Map");
+		// Load from config
+		esHost = config.esHost;
+		esIndex = config.esIndex;
+		mapLat = config.mapLat;
+		mapLong = config.mapLong;
+		mapZoomLevel = config.mapZoomLevel;
+		influenceThresh = config.influenceThresh;
 
+		cloudMadeKey = config.cloudMadeKey;
+		from_date = config.fromDate;
+		
+		
 		// Add copyright
 		var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/'+cloudMadeKey+'/27783/256/{z}/{x}/{y}.png',
 			cloudmadeAttribution = '<img src="http://campaigns.traackr.com/img/powered_by.png"><br/>Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
 			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
 
 		// start view
-		map.setView(new L.LatLng(37.766915,-122.44503), 12).addLayer(cloudmade);
+		map.setView(new L.LatLng(mapLat, mapLong), mapZoomLevel).addLayer(cloudmade);
 		setTimeout("TRAACKR.staalkr.getData()",2000);	
 
 		// get search term from query string q=?
@@ -81,6 +104,10 @@ TRAACKR.staalkr_func = function() {
  	var circleLocation = new L.LatLng(data.location.lat, data.location.lon)
  	// Temporary random score
  	var score = fields.traackr_reach;//_random(1,100);
+ 	
+ 	if (score < influenceThresh) {
+ 		return;
+ 	}
 	
 	var circleOptions = {};
 	
@@ -109,7 +136,7 @@ TRAACKR.staalkr_func = function() {
     };  
     }
     
-	var circle = new L.Circle(circleLocation,2*score, circleOptions);
+	var circle = new L.Circle(circleLocation,1*score, circleOptions);
 	map.addLayer(circle);
 	circle.bindPopup("<img style=float:left;margin:4px width=40 height=40 src=\"http://img.tweetimag.es/i/"+data.user.screen_name+"_n\"/><span style=font-size:18px;font-weight:bold>"+data.user.name+
 	" <a target=_blank href=\"http://twitter.com/"+data.user.screen_name+"\">(@"+data.user.screen_name+
@@ -142,6 +169,7 @@ TRAACKR.staalkr_func = function() {
             			
             		}
             	},
+            	"from" : 0, "size" : 100,
                "query": {
                	  
                   "bool": {
@@ -163,8 +191,9 @@ TRAACKR.staalkr_func = function() {
                      "order": "asc"
                      }
                   }
-               ]
-            };
+               ],
+					        
+        		};
             
             if (searchTerm != null) {
             	elasticQuery.query.bool.must.push({
@@ -174,7 +203,7 @@ TRAACKR.staalkr_func = function() {
                      });
             }
  $.ajax({
-         url: 'http://localhost:9200/twitter_location_sf/status/_search?pretty=true',
+         url: 'http://'+esHost+'/'+esIndex+'/status/_search?pretty=true',
          type: 'POST',
          data : JSON.stringify(elasticQuery),
          dataType : 'json',
@@ -185,6 +214,7 @@ TRAACKR.staalkr_func = function() {
          			 		from_date = data.hits.hits[data.hits.hits.length-1]._source.created_at
          			 		 _renderAll(data);
          			 		 _process_list_data(data);
+         			 		 console.log('Elastic Query: ' + JSON.stringify(elasticQuery));
          			 		 console.log('Data: '+JSON.stringify(data));
          			// }  else {
          			 //	console.log("Not enough data available, waiting...");
