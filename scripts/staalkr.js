@@ -1,16 +1,27 @@
-/*
- * TRAACKR.staalkr library.
+/**
+ * staalkr.js // TRAACKR, INC. 
+ * 
+ * This document set is the property of Traackr, Inc., a Massachusetts
+ * Corporation, and contains confidential and trade secret information. It
+ * cannot be transferred from the custody or control of Traackr except as
+ * authorized in writing by an officer of Traackr. Neither this item nor the
+ * information it contains can be used, transferred, reproduced, published,
+ * or disclosed, in whole or in part, directly or indirectly, except as
+ * expressly authorized by an officer of Traackr, pursuant to written
+ * agreement.
+ * 
+ * Copyright 2009-2012 Traackr, Inc. All Rights Reserved.
  */
  
  /*
- 	OPTIONS:
- 	
- 	searchTerm: what term do you wanna search for?  blank = bring it all!
+ 	OPTIONS: 	
  	esHost: elasticHost
  	esIndex: elasticsearch index name
- 	startLocation: Where do you want the map to open?  { lat: x, lon: y}
- 	cloudMadeKey: 
- 	
+ 	mapLat: Map latitude
+ 	mapLong: Map longitude
+ 	mapZoomLevel: Zoom level of map 1-18
+ 	cloudMadeKey: API Key for Cloudmade
+ 	influenceThreshold: 0-99, minimum influence percentile to display on map
  */
 if (typeof (TRAACKR) == "undefined")
     TRAACKR = {};
@@ -38,10 +49,13 @@ var cloudMadeKey = '';
 // Influence Threshold
 var influenceThresh = -1;
 
+// Latitude
 var mapLat = '';
 
+// Longitude
 var mapLong = '';
 
+// Zoom Level
 var mapZoomLevel = '';
 
 // Global list vars
@@ -66,7 +80,6 @@ TRAACKR.staalkr_func = function() {
 
 		cloudMadeKey = config.cloudMadeKey;
 		from_date = config.fromDate;
-		
 		
 		// Add copyright
 		var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/'+cloudMadeKey+'/27783/256/{z}/{x}/{y}.png',
@@ -175,11 +188,7 @@ TRAACKR.staalkr_func = function() {
                   "bool": {
                      "must": [
                      {
-                        "range": {
-                           "created_at": {
-                           "from": from_date
-                           }
-                        }
+                      
                      }
                     
                      ]
@@ -250,7 +259,6 @@ TRAACKR.staalkr_func = function() {
 
       if ( $.inArray(screen_name, known_screen_names) ===  -1 ) {
          screen_name_tweets_count[screen_name] = 1;
-         //screen_name_reach_score[screen_name] = Math.floor((Math.random()*100)+1);
          screen_name_reach_score[screen_name] = tweet.fields.traackr_reach;
          var markup = '<div id="' + screen_name+ '" class="influencer">' +
                '<table><tr>' +
@@ -306,9 +314,46 @@ TRAACKR.staalkr_func = function() {
       }
    } // End function get_url_vars
 
+	var _createRiver = new function() {
+	$.ajax({
+            crossDomain:true,
+            xhrFields: {
+                withCredentials: false
+            },
+           
+            url: 'http://'+esHost+'/_river/'+esIndex+'/_meta',
+            type: 'POST', 
+            data: JSON.stringify({
+					
+					 "type": "twitter",
+					 "twitter": {
+						"user": "staalkr",
+						"password": "StaalkRByTraackR",
+						"filter": {
+						  "locations": "-119.882812,14.944785,-58.359375,67.875541"
+						}
+					 },
+					 "index": {
+						"index": "traackr_northamerica_test",
+						"type": "status",
+						"bulk_size": 5
+					 }
+					
+				}),
+            dataType: 'json',
+            processData: false, 
+            success: function (json, statusText, xhr) {
+                return;
+            }, 
+            error: function (xhr, message, error) {
+               // alert(error);
+            }
+        });
+     } // end createRiver  
 
  return {
  	getData : _getData,
+ 	createRiver : _createRiver,
  	init: _init
  }
  

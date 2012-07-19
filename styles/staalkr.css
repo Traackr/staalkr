@@ -18,7 +18,7 @@ font-family: verdana, helvetica, arial, sans-serif;
 letter-spacing:-2px;
 color:#FD4837;
 font-weight:700;
-padding:20px 0 0;
+padding:0px;
 }
 
 h2 {
@@ -26,7 +26,7 @@ font-size: 24px;
 font-family: verdana, helvetica, arial, sans-serif;
 color:#444444;
 font-weight: 400;
-padding: 0 0 10px;
+padding: 0 0 0 0;
 }
 
 h3 {
@@ -125,7 +125,7 @@ border:1px solid #111111;
 width: 600px;
 height: 400px;
 overflow: hidden;
-padding: 30px 30px 30px 30px;
+padding-bottom: 30px;
 filter: alpha(opacity=85);
 opacity: .85;
 z-index: 34;
@@ -136,6 +136,7 @@ div.influencerListPanel {
    width: 600px;
    height: 380px;
    overflow: auto;
+   padding:0px;
 }
 .panel p{
 margin: 0 0 15px 0;
@@ -246,4 +247,6 @@ list-style-type: none;
    font-size: 20px;
    font-family: Arial,Helvetica;
    font-weight: bold;
+   padding-right:11px;
+   padding-top: 7px;
 }

@@ -1,8 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
    <head>
-
-       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <link rel="stylesheet" href="styles/leaflet.css" />
       <link rel="stylesheet" href="styles/staalkr.css" />
       <script type="text/javascript"
@@ -10,6 +8,7 @@
       </script>
       <script type="text/javascript">
 
+		// Toggle side panel
 		$(document).ready(function(){
 
     		$(".trigger").click(function(){
@@ -41,16 +40,16 @@
 </div>
 
 <div class="panel">
-		<div class="closePanel">X</div>
+		<div class="closePanel"><img src="images/close_button-icon.gif"/></div>
 		<div class="influencerListPanel">
-      <h1 style="text-align: center;">Top Influencers List</h1>
+      <h1 style="text-align: center;">High Profile List</h1>
       <div id="influencers_list"></div>
       </div>
 </div>
 <div style="clear:both;"></div>
 
 </div>
-<a class="trigger" href="#">Staalkr List</a>
+<a class="trigger" href="#">High Profile List</a>
 
 
       <div id="map" style="100%; height: 100%"></div>
@@ -66,14 +65,12 @@
          $(document).ready(function() {
             TRAACKR.staalkr = TRAACKR.staalkr_func();
             TRAACKR.staalkr.init({
-               searchTerm:"eshackday",
                esHost: "localhost:9200",
-               esIndex: "traackr_oakland",
+               esIndex: "staalkr_nassau",
                cloudMadeKey: "e9c4b141b3c64736a8db238eb1f8a4dd",
-               fromDate: "2012-06-02T14:00:00.000Z",
-               mapLat : 37.809784,
-               mapLong :-122.252598,
-               mapZoomLevel: 10,
+               mapLat : 40.764421,
+               mapLong :-73.525314,
+               mapZoomLevel: 11,
                influenceThresh: 0,
             });
          });
