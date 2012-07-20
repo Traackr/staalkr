@@ -1,0 +1,12 @@
+//follower_scores = [0:10, 75:50, 150:100];
+//def traackr_score(x, key) { 
+//	if(x >= follower_scores[key])
+//		follower_scores[150];
+//	else
+//		traackr_score(x,key-75);
+//}
+//traackr_score(doc['followers'].value, 150);
+def getScore(s, v) {
+	s * v
+}
+getScore(_score, doc['followers'].value)
