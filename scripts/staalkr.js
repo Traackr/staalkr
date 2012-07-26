@@ -186,12 +186,14 @@ TRAACKR.staalkr_func = function() {
                "query": {
                	  
                   "bool": {
-                     "must": [
-                     {
-                      
-                     }
-                    
-                     ]
+                  "must": [ {
+                  	"range" : {
+                  		"created_at": {
+                  			"from" : from_date
+                  		}
+                  	}
+                  	}
+                  ]
                   }
                },
                "sort": [
